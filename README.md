@@ -1,9 +1,5 @@
 # SCONE build guide for dummies 
 
-![Fortran](https://img.shields.io/badge/Fortran-%23734F96.svg?style=flat&logo=fortran&logoColor=white)
-![Linux](https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black)
-
-
 SCONE is a Monte Carlo radiation transport modelling/development tool. 
 It is being developed and maintained by the nuclear energy research group of Cambridge University. 
 SCONE is open source and the public repository is hosted [here](https://bitbucket.org/Mikolaj_Adam_Kowalski/scone/src/develop/). 
@@ -130,12 +126,7 @@ $ sudo ln -s ~/scone/Build/scone.out /usr/bin/scone
 Now you can run SCONE from anywhere you want by just typing ``scone`` in the terminal. 
 
 
-
-
-
-
-
-## Obtaining ACE tables and configuring nad entry file 
+## Obtaining ACE tables and configuring the entry file 
 
 download ACE tables from here NNDC/BNL ENDF 7.1
 create SCONE's own xsdir (like MCNP) file using this script/code <- entry file
