@@ -14,26 +14,25 @@ This guide contains:
 3. Configure the build process. 
 4. Compile the source code into an executable binary. 
 6. Create a symbolic link.
-7. Download ACE-formatted nuclear cross-section library.
-8. Configure a directory file for the downloaded library be used with SCONE.
+7. Download the ACE-formatted nuclear cross-section library.
+8. Configure a directory file for the downloaded library to be used with SCONE.
 8. Write a sample input file and run it.
-
 
 ## Prerequisites
 
 ### OS
-This guide is specifiacally prepared for Ubuntu/WSL. Ubuntu based distros (e.g., Lubuntu, Pop OS) should work as well. 
+This guide is specifically prepared for Ubuntu/WSL. Ubuntu based distros (e.g., Lubuntu, Pop OS) should work as well. 
 
-If you have a dedicated Ubuntu machile (or VM/Docker), thats great!
+If you have a dedicated Ubuntu machine (or VM/Docker), that's great!
 
-If you are on a Windows machine, Windows Subsystem for Linux or WSL might just be the best option for you. It is a compatibility layer that lets you run a complete Ubuntu terminal environment (or any Linux binary executables) natively on Windows. Go to Microsoft Store and write "Ubuntu" on the serach bar. Insatalltion should be trivial. Ensure that the Virtual Machine Platform and Windows Subsystem for Linux features are selected in Windows Features. SCONE runs on WSL perfectly fine. 
+If you are on a Windows machine, Windows Subsystem for Linux or WSL might just be the best option for you. It is a compatibility layer that lets you run a complete Ubuntu terminal environment (or any Linux binary executables) natively on Windows. Go to Microsoft Store and write "Ubuntu" on the search bar. Installation should be trivial. Ensure that the "Virtual Machine Platform" and "Windows Subsystem for Linux" features are selected in "Windows Features". SCONE runs on WSL perfectly fine. 
 
 ### Required repositories
-Before attempting SCONE compilation, the following software packages should be presnt on the machine, 
+Before attempting SCONE compilation, the following software packages should be present on the machine, 
 
 1. A meta-package named “build-essential” that includes the GNU compiler collection, GNU debugger, and other development libraries and tools required for compiling software. 
 2. Fortran (must be version 7)
-3. CMake (version 3.10+)
+3. CMake (must be version 3.10+)
 
 Additionally,
 
@@ -44,42 +43,42 @@ Additionally,
 
 Open a terminal (or in Windows, a Ubuntu terminal environment) and issue the following commands,
 
-```sh
+```
 $ sudo apt update
 $ sudo apt install build-essential
 $ sudo apt install gfortran
 $ sudo apt install cmake
 ```
-When you try to install gfortran with apt, it installs the latest available version (e.g., 9.x.x or 10.x.x). You can check the version with ``gfortran --verison``. However SCONE requires gfortran version 7.x.x, otherwise it will not compile! 
+When you try to install gfortran with apt, it installs the latest available version (e.g., 9.x.x or 10.x.x). You can check the version with ``gfortran --version``. However SCONE requires gfortran version 7.x.x, otherwise, it will not compile! 
 
 So you need to downgrade it. 
 
-> It is wortwhile to cover some basics here so you can appreciate what is happening next. When you type in ``gfortran``, it is actually a symbolic link located at ``/usr/bin/gfortran``. This location (along with other locations) is stored in an environment variable called ``PATH``. To view your ``PATH`` variable, type ``echo $PATH``. To view all the environment variable for the current user, type ``env``.    
+> It is worthwhile to cover some basics here so you can appreciate what is happening next. When you type in ``gfortran``, it is actually a symbolic link located at ``/usr/bin/gfortran``. This location (along with other locations) is stored in an environment variable called ``PATH``. To view your ``PATH`` variable, type ``echo $PATH``. To view all the environment variables for the current user, type ``env``.    
 
 >Right now ``/usr/bin/gfortran`` points to, for example, 
 ``/usr/bin/x86_64-linux-gnu-gfortran-9`` which is the 9.x.x binary.
 Whereas you need to make ``/usr/bin/gfortran`` to point to a 7.x.x
 binary.
 
-The easiest way to install gfortran 7.x.x is, obviously, using the apt utility. If you do a repository search using ``apt-cache search gfortran``, there is gfortran-7 on the list! Istall this repository by typing, 
+The easiest way to install gfortran 7.x.x is, obviously, using the apt utility. If you do a repository search using ``apt-cache search gfortran``, there is gfortran-7 on the list! Install this repository by typing, 
 
-```sh
+```
 $ sudo apt isntall gfortran-7
 ```
 Now there will be a new symlink ``/usr/bin/gfortran-7`` pointing to
 ``/usr/bin/x86_64-linux-gnu-gfortran-7``. This ``x86_64-linux-gnu-gfortran-7`` is the 
 compiler you need to compile SCONE. Now, you would want ``gfortran`` to point to this compiler. Issue the following commands, 
 
-```sh
+```
 $ sudo rm /usr/bin/gfortran
 $ sudo ln -s /usr/bin/x86_64-linux-gnu-gfortran-7 /usr/bin/gfortran
 ```
 
-Now, you can can check whether the association was correctly done by typing ``gfortran --version``. The reported version should now be 7.x.x.
+Now, you can check whether the association was correctly done by typing ``gfortran --version``. The reported version should now be 7.x.x.
 
 Move on to installing the remaining repositories, 
 
-```sh
+```
 $ sudo apt install git
 $ sudo apt install libomp-dev libomp5
 $ sudo apt install libblas-dev liblapack-dev
@@ -91,25 +90,25 @@ Installtion of pFUnit is omitted.
 
 ### Clone the SCONE repository
 
-To use SCONE, first move to yout home directory ``~`` use clone the repository,
+To use SCONE, first, move to your home directory ``~`` use clone the repository,
 
-```sh
+```
 $ cd ~
 $ git clone --branch develop https://bitbucket.org/Mikolaj_Adam_Kowalski/scone SCONE
 $ cd SCONE
 $ rm -rf .git/
 ```
-This will clone only the develop branch of the project. 
+This will clone only the "develop" branch of the project. 
 
-### Configrue and Compile SCONE
-SCONE uses CMake to control the compilation process. To avoid clutter, you are going to create a new folder inside the SCONE directory and put the generated configuration and build files inside it. Issue the following commands,  
+### Configure and Compile SCONE
+SCONE uses CMake to control the compilation process. To avoid clutter, you are going to create a new folder inside the SCONE directory and put the generated configuration and build files inside it. Issue the following commands,
 
 ```
 $ mkdir Build
 $ cd Build 
 $ sudo cmake .. -DBUILD_TESTS=OFF
 ```
-At this point the makefiles are generated. Now compile SCONE using the following command, 
+At this point, the makefiles are generated. Now compile SCONE using the following command, 
 
 ```
 $ sudo make
@@ -120,7 +119,7 @@ With the compilation done, the executable binary "scone.out" should be located i
 
 The following lets SCONE be invoked from anywhere (creating a symlink),
 
-```sh
+```
 $ sudo ln -s ~/scone/Build/scone.out /usr/bin/scone
 ```
 
@@ -129,18 +128,18 @@ Now you can run SCONE from anywhere you want by just typing ``scone`` in the ter
 
 ## Obtaining ACE library and configuring the directory file 
 
- 
-
 There are several evaluation projects, hence several outlets to get the 
 evaluated nuclear cross-section data libraries from. The evaluated data libraries are distributed
 as ENDF tapes. However, SCONE requires a "compact" version of the tapes as ACE-formatted 
 tables. There is always an extra step involved to get from ENDF to ACE. 
 Fortunately, ACE libraries based on different evaluations can be readily downloaded. 
 
-ENDF/B ACE libraries can be downloaded from NNDC/BNL or LANL websites. As an example, 
-head over to the LANL [website](https://nucleardata.lanl.gov/ace/) and expand the "ACE LIBRARIES" pane one left. Select "ENDF70" and download the .tgz archive. To download from command line, do the follwoing,
+ENDF/B ACE libraries can be downloaded from [NNDC/BNL](https://www.nndc.bnl.gov/endf/) or [LANL](https://nucleardata.lanl.gov/ace/) websites. Additionally, the JEFF ACE libraries can be downloaded from the [OACD/NEA](https://www.oecd-nea.org/dbdata/jeff/) website. 
 
-````sh
+As an example, 
+head over to the [LANL](https://nucleardata.lanl.gov/ace/) website and expand the "ACE LIBRARIES" pane one left. Select "ENDF70" and download the .tgz archive. To download from the command line, do the following,
+
+````
 $ cd ~ 
 $ wget https://nucleardata.lanl.gov/lib/endf70.tgz
 ````
@@ -149,53 +148,51 @@ Note that the URL following ``wget`` might get obsolete. In any case, you can al
 
 Once downloaded, expand the archive. We shall also rename the folder (and the subfolder that actually contains the ACE files) for our convenience. Type in the following in the terminal,
 
-````sh
+````
 $ tar xzf endf70.tgz
-$ mv endf70 XSdata_endfb70
-$ mv XSdata_endfb70/endf70 XSdata_endfb70/acedata
+$ mv endf70 XS
+$ mv XS/endf70 XS/acedata
 ````
 
-Hence, the ACE libraries are located at ``~/XSdata_endfb70/acedata/``.
+Hence, the ACE libraries are located at ``~/XS/acedata/``.
 
-Now its time to create the cross-section directory file for SCONE. 
+Now it's time to create the cross-section directory file for SCONE. 
 The directory file lists entry information of all cross-sections available in 
 the ACE library. 
 
-To create the directory file, first download the shell script "makeXSdir.sh" provided with this repository.
+To create the directory file, first, download the shell script "makeXSdir.sh" provided with this repository.
 Then place the script alongside your ``acedata`` folder. In the terminal, 
 
-````sh
+````
 $ wget https://raw.githubusercontent.com/saad589/SCONEBuild/master/makeXSdir.sh
-$ mv makeXSdir.sh ~/XSdata_endfb70/
+$ mv makeXSdir.sh ~/XS/
 ````
 
-Inside ``~/XSdata_endfb70/``, you now have ``makeXSdir.sh`` script and ``acedata`` folder. Run the script, 
+Inside ``~/XS/``, you now have ``makeXSdir.sh`` script and ``acedata`` folder. Run the ``makeXSdir.sh`` script, 
 
-````sh 
-$ cd XSdata_endfb70/
+````
+$ cd XS/
 $ chmod +x makeXSdir.sh
 $ ./makeXSdir.sh
 ````
 
-This sould create a directory file with the name "foo.aceXS" on the same directory. Let's give the directory file a representative name, 
+This should create a directory file with the name "foo.aceXS" on the same directory. Let's give the directory file a representative name, 
 
-````sh
+````
 $ mv foo.aceXS ENDFB70.aceXS
 ````
 
-You are all set! You have the directory file as ``~/XSdata_endfb70/ENDFB70.aceXS`` and the ACE tables located at ``~/XSdata_endfb70/acedata/``.
-
-
-Additionally, the JEFF ACE libraries can be download from the OACD/NEA [website](https://www.oecd-nea.org/dbdata/jeff/). The preparation process should be similar.
+You are all set! You have the directory generated file as ``~/XS/ENDFB70.aceXS`` and the ACE tables located at ``~/XS/acedata/``.
 
 ## Preparing your first input file and running SCONE
 
-The STACY-30 (model 2) benchmark ref. ICSBEB/LEU-SOL-THERM-007
+SCONE input file for the STACY-30 (model 2) benchmark (ref. ICSBEB/LEU-SOL-THERM-007) is given below,
 
-````sh
+````
 // STACY-30 (model 2) ref. LEU-SOL-THERM-007
+// Written by saad589
 
-type alphaPhysicsPackage;
+type eigenPhysicsPackage;
 
 pop      200000;
 active   1000; 
@@ -206,7 +203,7 @@ dataType ce;
 // outputFile ./Stacy;
 // printSource 1; 
 
-collisionOperator { neutronCE {type alphaNeutronCEstd;
+collisionOperator { neutronCE {type neutronCEstd;
                                // impAbs         1;
                                // roulette       1;
                               } 
@@ -214,7 +211,7 @@ collisionOperator { neutronCE {type alphaNeutronCEstd;
                   } 
 
 transportOperator { 
-                    type alphaTransportOperatorST;
+                    type transportOperatorST;
 					          cache 1;
                   } 
 
@@ -285,7 +282,7 @@ viz {
 
 nuclearData {
   handles { 
-     ceData { type aceNeutronDatabase; aceLibrary ~/XSdata_endfb70/ENDFB70.aceXS;}
+     ceData { type aceNeutronDatabase; aceLibrary ~/XS/ENDFB70.aceXS;}
   }
   materials { 
     numberOfGroups 69; 
@@ -327,14 +324,19 @@ nuclearData {
 ````
 Save the input file as STACY. 
 
-SCONE can be run with the following argumets: 
-``--plot`` plots geometry  specified by a viz dicttionary in the input file.
+SCONE can be run with the following arguments,
+``--plot`` plots geometry  specified by a viz dictionary in the input file.
 ``--omp <int>`` sets the number of OpenMP threads for within-node parallel execution.
 ```
-$ scone --plot               
+$ scone STACY --plot               
 $ scone STACY --omp 8          
 ```
 
+The STACY input file is presented above for illustrative purposes. A host of example input files is provided with the SCONE repository that you cloned earlier. They are located at ``~/scone/InputFiles/``. To run any of the provided input files, you need to provide the location of your directory file. Also, the ``.id`` part of the ``ZA.id`` under the material cards should be changed to whatever ``.id`` is available for your ACE library.
+
+> ``.id`` in ``ZA.id`` is a mnemonic that is defined by someone who originally prepared the ACE table. ACE tables are generated from evaluated ENDF tapes with the system code NJOY. Conventionally, ``.id`` is a two-digit integer that arbitrarily corresponds to a specific temperature. For example, ``1001.70`` might correspond to Hydrogen nuclear cross-section prepared 273 K. If you have obtained someone else's ACE library, refer to the documentation to see which ``.id`` corresponds to which temperature. 
+
+> Additionally, you might see ``ZA.id`` is followed by a letter ``c`` or something else, for instance ``1001.70c``. As a convention, the letter ``c`` means to tell you that this is a neutron cross-section table. Also, the letter ``t`` corresponds to the bound thermal scattering cross-section table.    
 
 ## Maintainers
 
@@ -344,7 +346,6 @@ $ scone STACY --omp 8
 
 Feel free to dive in! [Open an issue](https://github.com/saad589/matcom/issues/new) or submit PRs.
 
-
 ## License
 
-[GPL](LICENSE) © saad5989
+[GPL](LICENSE) © saad589
