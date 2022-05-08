@@ -1,25 +1,25 @@
 #!/bin/bash
-# This script generates the XS entry file for SCONE
+# This script generates the XS directory file for SCONE
 # 
-# the entry file has the following structure,
+# the directory file has the following structure,
 # ! comment 
-# <ZA.id>c   <line no.>   <absolute path>
+# <ZA>.<id><lib_type>  <starting_line_no.>  <absolute_path>
 #
 # expects "acedata" folder on the . directory
 # will search at most two levels deep, i.e., ./acedata/*/*
 # "acedata" folder should contain ASCII encoded ACE files 
 # binary tables are not supported 
-# reads 'old-style' ACE and numerates neutron XS only
+# reads 'old-style' ACE and numerates neutron XS only (for now)
 # 
-# Written by Saad Islam on 05 MAY 22
-# For instruction follow the release at, 
+# Written by Saad Islam 
+# For instruction visit the release, 
 # https://github.com/saad589/SCONEBuild
 
 # Vars
 dirPath="acedata" 
 outFile="foo.aceXS"
 
-# Make sure path to library directory is absolute 
+# Make the path to library directory absolute 
 dirPath=$PWD/$dirPath
 
 # Check whether "acedata"  exists
@@ -33,11 +33,7 @@ then
 else
     echo
     echo "Error: directory does not exist"
-    echo "Plese rename the folder that contains the ACE "
-	echo "tables to "$dirPath" and put the folder on the same "
-	echo "directory as this script."
-	echo "Further instruction is provided at: "
-	echo "https://github.com/saad589/SCONEBuild"
+    echo "Plese rename the folder that contains the ACE tables to "$dirPath" and put the folder on the same directory as this script. Further instruction is provided at: https://github.com/saad589/SCONEBuild"
 	exit 1 
 fi
 
